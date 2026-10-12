@@ -134,39 +134,78 @@ int main(void)
 			  last_update = HAL_GetTick();
 
 			  switch (mode) {
-			  	  case 0: // Mode 0: Test FillAll
-			  		  toggle_pattern = ~toggle_pattern;
-			  		  SSD1315_fb_FillAll(&oled1, toggle_pattern);
-			  		  SSD1315_WriteFullFrame(&oled1);
+			  	  case 0: // test FillAll
+			  		toggle_pattern = ~toggle_pattern;
+			  		SSD1315_fb_FillAll(&oled1, toggle_pattern);
+			  		SSD1315_WriteFullFrame(&oled1);
 
-			  		  mode++;
-			  		  break;
+			  		mode++;
+			  		break;
 
-			  	  case 1: // Mode 1: Test SetPixel
-			  		  SSD1315_fb_FillAll(&oled1, 0x00);
-			  		  SSD1315_SetPixel(&oled1, 0, 0);
-			  		  SSD1315_SetPixel(&oled1, 0, 63);
-			  		  SSD1315_SetPixel(&oled1, 127, 0);
-			  		  SSD1315_SetPixel(&oled1, 127, 63);
-			  		  SSD1315_WriteFullFrame(&oled1);
+			  	  case 1: // test SetPixel
+			  		SSD1315_fb_FillAll(&oled1, 0x00);
+			  		SSD1315_SetPixel(&oled1, 0, 0);
+			  		SSD1315_SetPixel(&oled1, 0, 63);
+			  		SSD1315_SetPixel(&oled1, 127, 0);
+			  		SSD1315_SetPixel(&oled1, 127, 63);
+			  		SSD1315_WriteFullFrame(&oled1);
 
-			  		  mode++;
-			  		  break;
+			  		mode++;
+			  		break;
 
-			  	  case 2: // Mode 2: Test ClrPixel
-			  		  SSD1315_fb_FillAll(&oled1, 0xFF);
-			  		  SSD1315_ClrPixel(&oled1, 0, 0);
-			  		  SSD1315_ClrPixel(&oled1, 0, 63);
-			  		  SSD1315_ClrPixel(&oled1, 127, 0);
-			  		  SSD1315_ClrPixel(&oled1, 127, 63);
-			  		  SSD1315_WriteFullFrame(&oled1);
+			  	  case 2: // test ClrPixel
+			  		SSD1315_fb_FillAll(&oled1, 0xFF);
+			  		SSD1315_ClrPixel(&oled1, 0, 0);
+			  		SSD1315_ClrPixel(&oled1, 0, 63);
+			  		SSD1315_ClrPixel(&oled1, 127, 0);
+			  		SSD1315_ClrPixel(&oled1, 127, 63);
+			  		SSD1315_WriteFullFrame(&oled1);
 
-			  		  mode++;
-			  		  break;
+			  		mode++;
+			  		break;
 
-			  	  case 3:
-			  		  SSD1315_TogPixel(&oled1, 63, 31);
-			  		  SSD1315_WriteFullFrame(&oled1);
+			  	  case 3: // test TogPixel
+			  		SSD1315_TogPixel(&oled1, 63, 31);
+			  		SSD1315_WriteFullFrame(&oled1);
+
+			  		mode++;
+			  		break;
+
+			  	  case 4: // test DrwLine_H
+			  		SSD1315_fb_FillAll(&oled1, 0x00);
+
+			  		SSD1315_DrwLine_H(&oled1, 10, 5, 117, 5);
+			  		SSD1315_DrwLine_H(&oled1, 10, 58, 117, 58);
+			  		SSD1315_DrwLine_H(&oled1, 10, 5, 10, 58);
+			  		SSD1315_DrwLine_H(&oled1, 117, 5, 117, 58);
+
+			  		SSD1315_DrwLine_H(&oled1, 63, 5, 117, 31);
+			  		SSD1315_DrwLine_H(&oled1, 117, 31, 63, 58);
+			  		SSD1315_DrwLine_H(&oled1, 63, 58, 10, 31);
+			  		SSD1315_DrwLine_H(&oled1, 10, 31, 63, 5);
+
+			  		SSD1315_WriteFullFrame(&oled1);
+
+			  		mode++;
+			  		break;
+
+			  	  case 5: // test DrwLine_L
+			  		SSD1315_fb_FillAll(&oled1, 0xFF);
+
+			  		SSD1315_DrwLine_L(&oled1, 10, 5, 117, 5);
+			  		SSD1315_DrwLine_L(&oled1, 10, 58, 117, 58);
+			  		SSD1315_DrwLine_L(&oled1, 10, 5, 10, 58);
+			  		SSD1315_DrwLine_L(&oled1, 117, 5, 117, 58);
+
+			  		SSD1315_DrwLine_L(&oled1, 63, 5, 117, 31);
+			  		SSD1315_DrwLine_L(&oled1, 117, 31, 63, 58);
+			  		SSD1315_DrwLine_L(&oled1, 63, 58, 10, 31);
+			  		SSD1315_DrwLine_L(&oled1, 10, 31, 63, 5);
+
+			  		SSD1315_WriteFullFrame(&oled1);
+
+			  		mode = 0;
+			  		break;
 
 			  	  default:
 			  		  mode = 0;

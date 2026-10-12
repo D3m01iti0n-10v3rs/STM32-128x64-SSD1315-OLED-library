@@ -1,7 +1,9 @@
 ../Core/Src/stm32_ssd1315.c:11:19:SSD1315_GetPrtStatus	2
 ../Core/Src/stm32_ssd1315.c:19:11:SSD1315_Init	3
-../Core/Src/stm32_ssd1315.c:55:6:SSD1315_fb_FillAll	2
-../Core/Src/stm32_ssd1315.c:65:6:SSD1315_SetPixel	2
-../Core/Src/stm32_ssd1315.c:77:6:SSD1315_ClrPixel	2
-../Core/Src/stm32_ssd1315.c:89:6:SSD1315_TogPixel	2
-../Core/Src/stm32_ssd1315.c:101:6:SSD1315_WriteFullFrame	4
+../Core/Src/stm32_ssd1315.c:55:6:SSD1315_fb_FillAll	1
+../Core/Src/stm32_ssd1315.c:61:6:SSD1315_SetPixel	1
+../Core/Src/stm32_ssd1315.c:69:6:SSD1315_ClrPixel	1
+../Core/Src/stm32_ssd1315.c:77:6:SSD1315_TogPixel	1
+../Core/Src/stm32_ssd1315.c:85:6:SSD1315_DrwLine_H	15
+../Core/Src/stm32_ssd1315.c:136:6:SSD1315_DrwLine_L	15
+../Core/Src/stm32_ssd1315.c:189:6:SSD1315_WriteFullFrame	4

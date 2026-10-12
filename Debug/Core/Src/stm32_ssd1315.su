@@ -1,7 +1,9 @@
 ../Core/Src/stm32_ssd1315.c:11:19:SSD1315_GetPrtStatus	16	static
 ../Core/Src/stm32_ssd1315.c:19:11:SSD1315_Init	1104	static
-../Core/Src/stm32_ssd1315.c:55:6:SSD1315_fb_FillAll	24	static
-../Core/Src/stm32_ssd1315.c:65:6:SSD1315_SetPixel	24	static
-../Core/Src/stm32_ssd1315.c:77:6:SSD1315_ClrPixel	24	static
-../Core/Src/stm32_ssd1315.c:89:6:SSD1315_TogPixel	24	static
-../Core/Src/stm32_ssd1315.c:101:6:SSD1315_WriteFullFrame	32	static
+../Core/Src/stm32_ssd1315.c:55:6:SSD1315_fb_FillAll	16	static
+../Core/Src/stm32_ssd1315.c:61:6:SSD1315_SetPixel	24	static
+../Core/Src/stm32_ssd1315.c:69:6:SSD1315_ClrPixel	24	static
+../Core/Src/stm32_ssd1315.c:77:6:SSD1315_TogPixel	24	static
+../Core/Src/stm32_ssd1315.c:85:6:SSD1315_DrwLine_H	32	static
+../Core/Src/stm32_ssd1315.c:136:6:SSD1315_DrwLine_L	32	static
+../Core/Src/stm32_ssd1315.c:189:6:SSD1315_WriteFullFrame	32	static

@@ -53,21 +53,13 @@ SSD1315_t SSD1315_Init(I2C_HandleTypeDef *hi2c, uint8_t addr){
 
 // modify fb ============================================================================
 void SSD1315_fb_FillAll(SSD1315_t *oled, uint8_t data){
-	HAL_StatusTypeDef err_code;
-	if ((err_code = SSD1315_GetPrtStatus(oled)) != HAL_OK){
-		oled->err = err_code;
-		return;
-	}
+	oled->err = HAL_OK;
 
 	memset(oled->fb, data, SSD1315_FB_SIZE);
 }
 
 void SSD1315_SetPixel(SSD1315_t *oled, uint8_t x, uint8_t y){
-	HAL_StatusTypeDef err_code;
-	if ((err_code = SSD1315_GetPrtStatus(oled)) != HAL_OK){
-		oled->err = err_code;
-		return;
-	}
+	oled->err = HAL_OK;
 
     uint16_t byte_i = x + ((y / 8) * 128);
     uint8_t bit_o = y % 8;
@@ -75,11 +67,7 @@ void SSD1315_SetPixel(SSD1315_t *oled, uint8_t x, uint8_t y){
 }
 
 void SSD1315_ClrPixel(SSD1315_t *oled, uint8_t x, uint8_t y){
-	HAL_StatusTypeDef err_code;
-	if ((err_code = SSD1315_GetPrtStatus(oled)) != HAL_OK){
-		oled->err = err_code;
-		return;
-	}
+	oled->err = HAL_OK;
 
     uint16_t byte_i = x + ((y / 8) * 128);
     uint8_t bit_o = y % 8;
@@ -87,16 +75,116 @@ void SSD1315_ClrPixel(SSD1315_t *oled, uint8_t x, uint8_t y){
 }
 
 void SSD1315_TogPixel(SSD1315_t *oled, uint8_t x, uint8_t y){
-	HAL_StatusTypeDef err_code;
-	if ((err_code = SSD1315_GetPrtStatus(oled)) != HAL_OK){
-		oled->err = err_code;
-		return;
-	}
+	oled->err = HAL_OK;
 
     uint16_t byte_i = x + ((y / 8) * 128);
     uint8_t bit_o = y % 8;
     oled->fb[byte_i] ^= ((uint8_t) 1 << bit_o);
 }
+
+void SSD1315_DrwLine_H(SSD1315_t *oled, int8_t x0, int8_t y0, int8_t x1, int8_t y1){
+	oled->err = HAL_OK;
+
+	if (x0 == x1){ // vertical line
+		if (y0 > y1){
+			int8_t temp = y0;
+			y0 = y1;
+			y1 = temp;
+		}
+		for (int8_t i = y0; i <= y1; i++) SSD1315_SetPixel(oled, (uint8_t)x0, (uint8_t)i);
+		return;
+	}
+
+	if (y0 == y1){ // horizontal line
+		if (x0 > x1){
+			int8_t temp = x0;
+			x0 = x1;
+			x1 = temp;
+		}
+		for (int8_t i = x0; i <= x1; i++) SSD1315_SetPixel(oled, (uint8_t)i, (uint8_t)y0);
+		return;
+	}
+
+	// diagonal line
+	int16_t dx = (x1 > x0) ? (x1 - x0) : (x0 - x1);
+	int16_t dy = (y1 > y0) ? -(y1 - y0) : -(y0 - y1);
+	int16_t err = dx + dy;
+
+	int8_t sx = (x0 < x1) ? 1 : -1;
+	int8_t sy = (y0 < y1) ? 1 : -1;
+
+	while(1){
+		SSD1315_SetPixel(oled, (uint8_t) x0, (uint8_t) y0);
+		if (x0 == x1 && y0 == y1) break;
+
+		int16_t e2 = 2 * err;
+
+		if (e2 >= dy){
+			err += dy;
+			x0 += sx;
+		}
+
+		if (e2 <= dx){
+			err += dx;
+			y0 += sy;
+		}
+	}
+
+	return;
+}
+
+void SSD1315_DrwLine_L(SSD1315_t *oled, int8_t x0, int8_t y0, int8_t x1, int8_t y1){
+	oled->err = HAL_OK;
+
+	if (x0 == x1){ // vertical line
+		if (y0 > y1){
+			int8_t temp = y0;
+			y0 = y1;
+			y1 = temp;
+		}
+		for (int8_t i = y0; i <= y1; i++) SSD1315_ClrPixel(oled, (uint8_t)x0, (uint8_t)i);
+		return;
+	}
+
+	if (y0 == y1){ // horizontal line
+		if (x0 > x1){
+			int8_t temp = x0;
+			x0 = x1;
+			x1 = temp;
+		}
+		for (int8_t i = x0; i <= x1; i++) SSD1315_ClrPixel(oled, (uint8_t)i, (uint8_t)y0);
+		return;
+	}
+
+	// diagonal line
+	int16_t dx = (x1 > x0) ? (x1 - x0) : (x0 - x1);
+	int16_t dy = (y1 > y0) ? -(y1 - y0) : -(y0 - y1);
+	int16_t err = dx + dy;
+
+	int8_t sx = (x0 < x1) ? 1 : -1;
+	int8_t sy = (y0 < y1) ? 1 : -1;
+
+	while(1){
+		SSD1315_ClrPixel(oled, (uint8_t) x0, (uint8_t) y0);
+		if (x0 == x1 && y0 == y1) break;
+
+		int16_t e2 = 2 * err;
+
+		if (e2 >= dy){
+			err += dy;
+			x0 += sx;
+		}
+
+		if (e2 <= dx){
+			err += dx;
+			y0 += sy;
+		}
+	}
+
+	return;
+}
+
+
 
 void SSD1315_WriteFullFrame(SSD1315_t *oled){
 	HAL_StatusTypeDef err_code;

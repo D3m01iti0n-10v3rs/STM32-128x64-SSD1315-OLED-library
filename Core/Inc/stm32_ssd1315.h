@@ -49,6 +49,9 @@ void SSD1315_SetPixel(SSD1315_t *oled, uint8_t x, uint8_t y);
 void SSD1315_ClrPixel(SSD1315_t *oled, uint8_t x, uint8_t y);
 void SSD1315_TogPixel(SSD1315_t *oled, uint8_t x, uint8_t y);
 
+void SSD1315_DrwLine_H(SSD1315_t *oled, int8_t x0, int8_t y0, int8_t x1, int8_t y1);
+void SSD1315_DrwLine_L(SSD1315_t *oled, int8_t x0, int8_t y0, int8_t x1, int8_t y1);
+
 void SSD1315_WriteFullFrame(SSD1315_t *oled);
 
 #endif /* INC_STM32_SSD1315_H_ */
