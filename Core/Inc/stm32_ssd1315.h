@@ -17,6 +17,7 @@
 #define SSD1315_ADDR0 			((uint8_t)0x3C)
 #define SSD1315_ADDR1 			((uint8_t)0x3D)
 
+// fb
 #define SSD1315_FB_SIZE			((uint16_t)1024)
 
 // cmd/data mode sel
@@ -41,7 +42,13 @@ HAL_StatusTypeDef SSD1315_GetPrtStatus(SSD1315_t *oled);
 
 // user functions =======================================================================
 SSD1315_t SSD1315_Init(I2C_HandleTypeDef *hi2c, uint8_t addr);
+
 void SSD1315_fb_FillAll(SSD1315_t *oled, uint8_t data);
+
+void SSD1315_SetPixel(SSD1315_t *oled, uint8_t x, uint8_t y);
+void SSD1315_ClrPixel(SSD1315_t *oled, uint8_t x, uint8_t y);
+void SSD1315_TogPixel(SSD1315_t *oled, uint8_t x, uint8_t y);
+
 void SSD1315_WriteFullFrame(SSD1315_t *oled);
 
 #endif /* INC_STM32_SSD1315_H_ */

@@ -15,8 +15,7 @@ HAL_StatusTypeDef SSD1315_GetPrtStatus(SSD1315_t *oled){
 
 // helpers
 
-
-// user functions =======================================================================
+// init =================================================================================
 SSD1315_t SSD1315_Init(I2C_HandleTypeDef *hi2c, uint8_t addr){
 	SSD1315_t oled = {hi2c, addr, HAL_OK};
 
@@ -52,8 +51,51 @@ SSD1315_t SSD1315_Init(I2C_HandleTypeDef *hi2c, uint8_t addr){
 	return oled;
 }
 
+// modify fb ============================================================================
 void SSD1315_fb_FillAll(SSD1315_t *oled, uint8_t data){
+	HAL_StatusTypeDef err_code;
+	if ((err_code = SSD1315_GetPrtStatus(oled)) != HAL_OK){
+		oled->err = err_code;
+		return;
+	}
+
 	memset(oled->fb, data, SSD1315_FB_SIZE);
+}
+
+void SSD1315_SetPixel(SSD1315_t *oled, uint8_t x, uint8_t y){
+	HAL_StatusTypeDef err_code;
+	if ((err_code = SSD1315_GetPrtStatus(oled)) != HAL_OK){
+		oled->err = err_code;
+		return;
+	}
+
+    uint16_t byte_i = x + ((y / 8) * 128);
+    uint8_t bit_o = y % 8;
+    oled->fb[byte_i] |= ((uint8_t) 1 << bit_o);
+}
+
+void SSD1315_ClrPixel(SSD1315_t *oled, uint8_t x, uint8_t y){
+	HAL_StatusTypeDef err_code;
+	if ((err_code = SSD1315_GetPrtStatus(oled)) != HAL_OK){
+		oled->err = err_code;
+		return;
+	}
+
+    uint16_t byte_i = x + ((y / 8) * 128);
+    uint8_t bit_o = y % 8;
+    oled->fb[byte_i] &= ~((uint8_t) 1 << bit_o);
+}
+
+void SSD1315_TogPixel(SSD1315_t *oled, uint8_t x, uint8_t y){
+	HAL_StatusTypeDef err_code;
+	if ((err_code = SSD1315_GetPrtStatus(oled)) != HAL_OK){
+		oled->err = err_code;
+		return;
+	}
+
+    uint16_t byte_i = x + ((y / 8) * 128);
+    uint8_t bit_o = y % 8;
+    oled->fb[byte_i] ^= ((uint8_t) 1 << bit_o);
 }
 
 void SSD1315_WriteFullFrame(SSD1315_t *oled){

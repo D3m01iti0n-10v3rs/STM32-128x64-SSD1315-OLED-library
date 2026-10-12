@@ -119,6 +119,7 @@ int main(void)
 
   uint32_t last_update = 0;
   uint8_t toggle_pattern = 0x00;
+  uint8_t mode = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -128,20 +129,56 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if (HAL_GetTick() - last_update >= 1000) {
-	      last_update = HAL_GetTick();
+	  if (HAL_GetTick() - last_update >= 2000) {
+		  if (SSD1315_GetPrtStatus(&oled1) == HAL_OK) {
+			  last_update = HAL_GetTick();
 
-	      // Check if I2C port is free BEFORE touching the framebuffer
-	      if (SSD1315_GetPrtStatus(&oled1) == HAL_OK) {
-	          toggle_pattern = ~toggle_pattern;
-	          SSD1315_fb_FillAll(&oled1, toggle_pattern);
-	          SSD1315_WriteFullFrame(&oled1);
-	      } else {
-	          uart_send("I2C port busy\r\n");
-	      }
+			  switch (mode) {
+			  	  case 0: // Mode 0: Test FillAll
+			  		  toggle_pattern = ~toggle_pattern;
+			  		  SSD1315_fb_FillAll(&oled1, toggle_pattern);
+			  		  SSD1315_WriteFullFrame(&oled1);
+
+			  		  mode++;
+			  		  break;
+
+			  	  case 1: // Mode 1: Test SetPixel
+			  		  SSD1315_fb_FillAll(&oled1, 0x00);
+			  		  SSD1315_SetPixel(&oled1, 0, 0);
+			  		  SSD1315_SetPixel(&oled1, 0, 63);
+			  		  SSD1315_SetPixel(&oled1, 127, 0);
+			  		  SSD1315_SetPixel(&oled1, 127, 63);
+			  		  SSD1315_WriteFullFrame(&oled1);
+
+			  		  mode++;
+			  		  break;
+
+			  	  case 2: // Mode 2: Test ClrPixel
+			  		  SSD1315_fb_FillAll(&oled1, 0xFF);
+			  		  SSD1315_ClrPixel(&oled1, 0, 0);
+			  		  SSD1315_ClrPixel(&oled1, 0, 63);
+			  		  SSD1315_ClrPixel(&oled1, 127, 0);
+			  		  SSD1315_ClrPixel(&oled1, 127, 63);
+			  		  SSD1315_WriteFullFrame(&oled1);
+
+			  		  mode++;
+			  		  break;
+
+			  	  case 3:
+			  		  SSD1315_TogPixel(&oled1, 63, 31);
+			  		  SSD1315_WriteFullFrame(&oled1);
+
+			  	  default:
+			  		  mode = 0;
+			  		  break;
+			  }
+		  }
+
+		  else uart_send("I2C port busy\r\n");
+
 	  }
 
-	  HAL_Delay(20);
+	  	  HAL_Delay(20);
   }
   /* USER CODE END 3 */
 }
