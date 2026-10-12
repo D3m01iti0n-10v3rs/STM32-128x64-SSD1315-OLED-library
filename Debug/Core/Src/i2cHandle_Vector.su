@@ -1,0 +1,4 @@
+../Core/Src/i2cHandle_Vector.c:10:6:i2cHVec_Init	16	static
+../Core/Src/i2cHandle_Vector.c:17:9:i2cHVec_Push	24	static
+../Core/Src/i2cHandle_Vector.c:37:6:i2cHVec_Free	16	static
+../Core/Src/i2cHandle_Vector.c:46:9:i2cHVec_Contains	24	static

@@ -1,0 +1,4 @@
+../Core/Src/i2cHandle_Vector.c:10:6:i2cHVec_Init	2
+../Core/Src/i2cHandle_Vector.c:17:9:i2cHVec_Push	5
+../Core/Src/i2cHandle_Vector.c:37:6:i2cHVec_Free	2
+../Core/Src/i2cHandle_Vector.c:46:9:i2cHVec_Contains	5
