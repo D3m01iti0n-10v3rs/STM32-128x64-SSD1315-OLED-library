@@ -204,8 +204,34 @@ int main(void)
 
 			  		SSD1315_WriteFullFrame(&oled1);
 
-			  		mode = 0;
+			  		mode++;
 			  		break;
+
+			  	  case 6:
+			  		SSD1315_fb_FillAll(&oled1, 0x00);
+
+			  		SSD1315_FillRect_H(&oled1, 4, 2, 56, 24);
+			  		SSD1315_FillRect_H(&oled1, 68, 2, 56, 24);
+			  		SSD1315_FillRect_H(&oled1, 4, 34, 56, 24);
+			  		SSD1315_FillRect_H(&oled1, 68, 34, 56, 24);
+
+			  		SSD1315_WriteFullFrame(&oled1);
+
+			  		mode++;
+			  		break;
+
+			  	  case 7:
+				  	SSD1315_fb_FillAll(&oled1, 0xFF);
+
+				  	SSD1315_FillRect_L(&oled1, 4, 2, 56, 24);
+				  	SSD1315_FillRect_L(&oled1, 68, 2, 56, 24);
+				  	SSD1315_FillRect_L(&oled1, 4, 34, 56, 24);
+				  	SSD1315_FillRect_L(&oled1, 68, 34, 56, 24);
+
+				  	SSD1315_WriteFullFrame(&oled1);
+
+				  	mode = 0;
+				  	break;
 
 			  	  default:
 			  		  mode = 0;

@@ -14,6 +14,13 @@ HAL_StatusTypeDef SSD1315_GetPrtStatus(SSD1315_t *oled){
 }
 
 // helpers
+inline static uint8_t SSD1315_FindPageY(uint8_t y){
+	return y / 8;
+}
+
+inline static uint8_t SSD1315_FindIndexY(uint8_t y){
+	return y % 8;
+}
 
 // init =================================================================================
 SSD1315_t SSD1315_Init(I2C_HandleTypeDef *hi2c, uint8_t addr){
@@ -182,6 +189,68 @@ void SSD1315_DrwLine_L(SSD1315_t *oled, int8_t x0, int8_t y0, int8_t x1, int8_t 
 	}
 
 	return;
+}
+
+void SSD1315_FillRect_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h){
+
+	uint8_t bot_y = top_y + h - 1;
+	uint8_t top_p = SSD1315_FindPageY(top_y);
+	uint8_t bot_p = SSD1315_FindPageY(bot_y);
+	uint8_t top_p_idx = SSD1315_FindIndexY(top_y);
+	uint8_t bot_p_idx = SSD1315_FindIndexY(bot_y);
+
+	// fill on single page
+	if (top_p == bot_p) {
+		uint8_t mask = (0xFF << top_p_idx) & (0xFF >> (7 - bot_p_idx));
+		uint16_t offset = (top_p * SSD1315_FB_PSIZE) + lft_x;
+
+		for (uint8_t x = 0; x < w; x++) oled->fb[offset + x] |= mask;
+
+		return;
+	}
+
+	// multi pafe fill
+	uint8_t top_mask = 0xFF << top_p_idx; // top page
+	uint16_t top_offset = (top_p * SSD1315_FB_PSIZE) + lft_x;
+	for (uint8_t i = 0; i < w; i++) oled->fb[top_offset + i] |= top_mask;
+
+	for (uint8_t i = top_p + 1; i < bot_p; i++) // middle pages
+		memset(oled->fb + (i * SSD1315_FB_PSIZE) + lft_x, 0xFF, w);
+
+	uint8_t bot_mask = 0xFF >> (7 - bot_p_idx); // bot page
+	uint16_t bot_offset = (bot_p * SSD1315_FB_PSIZE) + lft_x;
+	for (uint8_t i = 0; i < w; i++) oled->fb[bot_offset + i] |= bot_mask;
+}
+
+void SSD1315_FillRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h){
+
+	uint8_t bot_y = top_y + h - 1;
+	uint8_t top_p = SSD1315_FindPageY(top_y);
+	uint8_t bot_p = SSD1315_FindPageY(bot_y);
+	uint8_t top_p_idx = SSD1315_FindIndexY(top_y);
+	uint8_t bot_p_idx = SSD1315_FindIndexY(bot_y);
+
+	// fill on single page
+	if (top_p == bot_p) {
+		uint8_t mask = ~(0xFF << top_p_idx) & ~(0xFF >> (7 - bot_p_idx));
+		uint16_t offset = (top_p * SSD1315_FB_PSIZE) + lft_x;
+
+		for (uint8_t x = 0; x < w; x++) oled->fb[offset + x] &= mask;
+
+		return;
+	}
+
+	// multi pafe fill
+	uint8_t top_mask = ~(0xFF << top_p_idx); // top page
+	uint16_t top_offset = (top_p * SSD1315_FB_PSIZE) + lft_x;
+	for (uint8_t i = 0; i < w; i++) oled->fb[top_offset + i] &= top_mask;
+
+	for (uint8_t i = top_p + 1; i < bot_p; i++) // middle pages
+		memset(oled->fb + (i * SSD1315_FB_PSIZE) + lft_x, 0x00, w);
+
+	uint8_t bot_mask = ~(0xFF >> (7 - bot_p_idx)); // bot page
+	uint16_t bot_offset = (bot_p * SSD1315_FB_PSIZE) + lft_x;
+	for (uint8_t i = 0; i < w; i++) oled->fb[bot_offset + i] &= bot_mask;
 }
 
 

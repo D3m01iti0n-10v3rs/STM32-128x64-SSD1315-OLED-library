@@ -19,6 +19,31 @@
 
 // fb
 #define SSD1315_FB_SIZE			((uint16_t)1024)
+#define SSD1315_FB_PSIZE		((uint16_t)128)
+
+#define SSD1315_FB_P0_STR		((uint16_t)0)
+#define SSD1315_FB_P0_END		((uint16_t)127)
+
+#define SSD1315_FB_P1_STR		((uint16_t)128)
+#define SSD1315_FB_P1_END		((uint16_t)255)
+
+#define SSD1315_FB_P2_STR		((uint16_t)256)
+#define SSD1315_FB_P2_END		((uint16_t)383)
+
+#define SSD1315_FB_P3_STR		((uint16_t)384)
+#define SSD1315_FB_P3_END		((uint16_t)511)
+
+#define SSD1315_FB_P4_STR		((uint16_t)512)
+#define SSD1315_FB_P4_END		((uint16_t)639)
+
+#define SSD1315_FB_P5_STR		((uint16_t)640)
+#define SSD1315_FB_P5_END		((uint16_t)767)
+
+#define SSD1315_FB_P6_STR		((uint16_t)768)
+#define SSD1315_FB_P6_END		((uint16_t)895)
+
+#define SSD1315_FB_P7_STR		((uint16_t)896)
+#define SSD1315_FB_P7_END		((uint16_t)1023)
 
 // cmd/data mode sel
 #define SSD1315_CTRL_CMD 		((uint8_t)0x00)
@@ -51,6 +76,9 @@ void SSD1315_TogPixel(SSD1315_t *oled, uint8_t x, uint8_t y);
 
 void SSD1315_DrwLine_H(SSD1315_t *oled, int8_t x0, int8_t y0, int8_t x1, int8_t y1);
 void SSD1315_DrwLine_L(SSD1315_t *oled, int8_t x0, int8_t y0, int8_t x1, int8_t y1);
+
+void SSD1315_FillRect_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h);
+void SSD1315_FillRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h);
 
 void SSD1315_WriteFullFrame(SSD1315_t *oled);
 
