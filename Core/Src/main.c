@@ -134,7 +134,7 @@ int main(void)
 			  last_update = HAL_GetTick();
 
 			  switch (mode) {
-			  	  case 0: // test FillAll
+			  	case 0: // test FillAll
 			  		toggle_pattern = ~toggle_pattern;
 			  		SSD1315_fb_FillAll(&oled1, toggle_pattern);
 			  		SSD1315_WriteFullFrame(&oled1);
@@ -142,7 +142,7 @@ int main(void)
 			  		mode++;
 			  		break;
 
-			  	  case 1: // test SetPixel
+			  	case 1: // test SetPixel
 			  		SSD1315_fb_FillAll(&oled1, 0x00);
 			  		SSD1315_SetPixel(&oled1, 0, 0);
 			  		SSD1315_SetPixel(&oled1, 0, 63);
@@ -153,7 +153,7 @@ int main(void)
 			  		mode++;
 			  		break;
 
-			  	  case 2: // test ClrPixel
+			  	case 2: // test ClrPixel
 			  		SSD1315_fb_FillAll(&oled1, 0xFF);
 			  		SSD1315_ClrPixel(&oled1, 0, 0);
 			  		SSD1315_ClrPixel(&oled1, 0, 63);
@@ -164,14 +164,14 @@ int main(void)
 			  		mode++;
 			  		break;
 
-			  	  case 3: // test TogPixel
+			    case 3: // test TogPixel
 			  		SSD1315_TogPixel(&oled1, 63, 31);
 			  		SSD1315_WriteFullFrame(&oled1);
 
 			  		mode++;
 			  		break;
 
-			  	  case 4: // test DrwLine_H
+			  	case 4: // test DrwLine_H
 			  		SSD1315_fb_FillAll(&oled1, 0x00);
 
 			  		SSD1315_DrwLine_H(&oled1, 10, 5, 117, 5);
@@ -189,7 +189,7 @@ int main(void)
 			  		mode++;
 			  		break;
 
-			  	  case 5: // test DrwLine_L
+			    case 5: // test DrwLine_L
 			  		SSD1315_fb_FillAll(&oled1, 0xFF);
 
 			  		SSD1315_DrwLine_L(&oled1, 10, 5, 117, 5);
@@ -207,7 +207,7 @@ int main(void)
 			  		mode++;
 			  		break;
 
-			  	  case 6:
+			  	case 6:
 			  		SSD1315_fb_FillAll(&oled1, 0x00);
 
 			  		SSD1315_FillRect_H(&oled1, 4, 2, 56, 24);
@@ -220,7 +220,7 @@ int main(void)
 			  		mode++;
 			  		break;
 
-			  	  case 7:
+			  	case 7:
 				  	SSD1315_fb_FillAll(&oled1, 0xFF);
 
 				  	SSD1315_FillRect_L(&oled1, 4, 2, 56, 24);
@@ -230,12 +230,38 @@ int main(void)
 
 				  	SSD1315_WriteFullFrame(&oled1);
 
+				  	mode++;
+				  	break;
+
+          case 8:
+			  		SSD1315_fb_FillAll(&oled1, 0x00);
+
+			  		SSD1315_DrawRect_H(&oled1, 4, 2, 56, 24);
+			  		SSD1315_DrawRect_H(&oled1, 68, 2, 56, 24);
+			  		SSD1315_DrawRect_H(&oled1, 4, 34, 56, 24);
+			  		SSD1315_DrawRect_H(&oled1, 68, 34, 56, 24);
+
+			  		SSD1315_WriteFullFrame(&oled1);
+
+			  		mode++;
+			  		break;
+
+          case 9:
+				  	SSD1315_fb_FillAll(&oled1, 0xFF);
+
+				  	SSD1315_DrawRect_L(&oled1, 4, 2, 56, 24);
+				  	SSD1315_DrawRect_L(&oled1, 68, 2, 56, 24);
+				  	SSD1315_DrawRect_L(&oled1, 4, 34, 56, 24);
+				  	SSD1315_DrawRect_L(&oled1, 68, 34, 56, 24);
+
+				  	SSD1315_WriteFullFrame(&oled1);
+
 				  	mode = 0;
 				  	break;
 
-			  	  default:
-			  		  mode = 0;
-			  		  break;
+			  	default:
+			  	  mode = 0;
+			  	  break;
 			  }
 		  }
 

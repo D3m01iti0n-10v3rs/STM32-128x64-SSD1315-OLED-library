@@ -80,6 +80,9 @@ void SSD1315_DrwLine_L(SSD1315_t *oled, int8_t x0, int8_t y0, int8_t x1, int8_t 
 void SSD1315_FillRect_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h);
 void SSD1315_FillRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h);
 
+void SSD1315_DrawRect_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h);
+void SSD1315_DrawRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h);
+
 void SSD1315_WriteFullFrame(SSD1315_t *oled);
 
 #endif /* INC_STM32_SSD1315_H_ */

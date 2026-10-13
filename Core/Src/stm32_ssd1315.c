@@ -253,6 +253,30 @@ void SSD1315_FillRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w
 	for (uint8_t i = 0; i < w; i++) oled->fb[bot_offset + i] &= bot_mask;
 }
 
+void SSD1315_DrawRect_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h){
+	uint8_t rgt_x = lft_x + w;
+	uint8_t bot_y = top_y + h;
+
+	SSD1315_DrwLine_H(SSD1315_t *oled, lft_x, top_y, rgt_x, top_y);
+	SSD1315_DrwLine_H(SSD1315_t *oled, lft_x, top_y, lft_x, bot_y);
+	SSD1315_DrwLine_H(SSD1315_t *oled, rgt_x, bot_y, lft_x, bot_y);
+	SSD1315_DrwLine_H(SSD1315_t *oled, rgt_x, bot_y, rgt_x, top_y);
+
+	return;
+}
+
+void SSD1315_DrawRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h){
+	uint8_t rgt_x = lft_x + w;
+	uint8_t bot_y = top_y + h;
+
+	SSD1315_DrwLine_L(SSD1315_t *oled, lft_x, top_y, rgt_x, top_y);
+	SSD1315_DrwLine_L(SSD1315_t *oled, lft_x, top_y, lft_x, bot_y);
+	SSD1315_DrwLine_L(SSD1315_t *oled, rgt_x, bot_y, lft_x, bot_y);
+	SSD1315_DrwLine_L(SSD1315_t *oled, rgt_x, bot_y, rgt_x, top_y);
+
+	return;
+}
+
 
 
 void SSD1315_WriteFullFrame(SSD1315_t *oled){
