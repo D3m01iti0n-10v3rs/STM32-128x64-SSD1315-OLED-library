@@ -10,4 +10,6 @@
 ../Core/Src/stm32_ssd1315.c:143:6:SSD1315_DrwLine_L	15
 ../Core/Src/stm32_ssd1315.c:194:6:SSD1315_FillRect_H	6
 ../Core/Src/stm32_ssd1315.c:225:6:SSD1315_FillRect_L	6
-../Core/Src/stm32_ssd1315.c:258:6:SSD1315_WriteFullFrame	4
+../Core/Src/stm32_ssd1315.c:256:6:SSD1315_DrawRect_H	1
+../Core/Src/stm32_ssd1315.c:268:6:SSD1315_DrawRect_L	1
+../Core/Src/stm32_ssd1315.c:282:6:SSD1315_WriteFullFrame	4
