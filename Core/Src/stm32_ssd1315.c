@@ -237,7 +237,7 @@ void SSD1315_FillRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w
 
 	// fill on single page
 	if (top_p == bot_p) {
-		uint8_t mask = ~(0xFF << top_p_idx) & ~(0xFF >> (7 - bot_p_idx));
+		uint8_t mask = ~((0xFF << top_p_idx) & (0xFF >> (7 - bot_p_idx)));
 		uint16_t offset = (top_p * SSD1315_FB_PSIZE) + lft_x;
 
 		for (uint8_t x = 0; x < w; x++) oled->fb[offset + x] &= mask;
@@ -259,25 +259,25 @@ void SSD1315_FillRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w
 }
 
 void SSD1315_DrawRect_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h){
-	uint8_t rgt_x = lft_x + w;
-	uint8_t bot_y = top_y + h;
+	uint8_t rgt_x = lft_x + w - 1;
+	uint8_t bot_y = top_y + h - 1;
 
-	SSD1315_DrwLine_H(SSD1315_t *oled, lft_x, top_y, rgt_x, top_y);
-	SSD1315_DrwLine_H(SSD1315_t *oled, lft_x, top_y, lft_x, bot_y);
-	SSD1315_DrwLine_H(SSD1315_t *oled, rgt_x, bot_y, lft_x, bot_y);
-	SSD1315_DrwLine_H(SSD1315_t *oled, rgt_x, bot_y, rgt_x, top_y);
+	SSD1315_DrwLine_H(oled, lft_x, top_y, rgt_x, top_y);
+	SSD1315_DrwLine_H(oled, lft_x, top_y, lft_x, bot_y);
+	SSD1315_DrwLine_H(oled, rgt_x, bot_y, lft_x, bot_y);
+	SSD1315_DrwLine_H(oled, rgt_x, bot_y, rgt_x, top_y);
 
 	return;
 }
 
 void SSD1315_DrawRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h){
-	uint8_t rgt_x = lft_x + w;
-	uint8_t bot_y = top_y + h;
+	uint8_t rgt_x = lft_x + w - 1;
+	uint8_t bot_y = top_y + h - 1;
 
-	SSD1315_DrwLine_L(SSD1315_t *oled, lft_x, top_y, rgt_x, top_y);
-	SSD1315_DrwLine_L(SSD1315_t *oled, lft_x, top_y, lft_x, bot_y);
-	SSD1315_DrwLine_L(SSD1315_t *oled, rgt_x, bot_y, lft_x, bot_y);
-	SSD1315_DrwLine_L(SSD1315_t *oled, rgt_x, bot_y, rgt_x, top_y);
+	SSD1315_DrwLine_L(oled, lft_x, top_y, rgt_x, top_y);
+	SSD1315_DrwLine_L(oled, lft_x, top_y, lft_x, bot_y);
+	SSD1315_DrwLine_L(oled, rgt_x, bot_y, lft_x, bot_y);
+	SSD1315_DrwLine_L(oled, rgt_x, bot_y, rgt_x, top_y);
 
 	return;
 }
