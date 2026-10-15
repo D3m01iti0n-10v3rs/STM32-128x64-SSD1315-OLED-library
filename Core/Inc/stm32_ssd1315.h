@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <string.h>
 
+
+#include "stm32_ssd1315_fonts.h"
 #include "main.h"
 
 // i2c addr
@@ -20,6 +22,8 @@
 // fb
 #define SSD1315_FB_SIZE			((uint16_t)1024)
 #define SSD1315_FB_PSIZE		((uint16_t)128)
+#define SSD1315_FB_PWIDTH		((uint16_t)128)
+#define SSD1315_FB_PHEIGHT		((uint16_t)8)
 
 #define SSD1315_FB_P0_STR		((uint16_t)0)
 #define SSD1315_FB_P0_END		((uint16_t)127)
@@ -52,6 +56,9 @@
 // commands
 #define SSD1315_CMD_DISP_ON 	((uint8_t)0xAF)
 #define SSD1315_CMD_DISP_OFF 	((uint8_t)0xAE)
+
+// misc
+#define SSD1315_ASCII_BM_OFFSET	((uint8_t)32)
 
 // struct
 typedef struct {

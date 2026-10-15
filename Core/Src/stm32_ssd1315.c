@@ -6,6 +6,7 @@
  */
 
 #include "stm32_ssd1315.h"
+#include "stm32_ssd1315_fonts.h"
 
 // get/set functions =====================================================================
 HAL_StatusTypeDef SSD1315_GetPrtStatus(SSD1315_t *oled){
@@ -20,6 +21,10 @@ inline static uint8_t SSD1315_FindPageY(uint8_t y){
 
 inline static uint8_t SSD1315_FindIndexY(uint8_t y){
 	return y % 8;
+}
+
+inline static uint16_t SSD1315_FindByteIndex(uint8_t x, uint8_t y){
+	return (x + ((y / 8) * 128));
 }
 
 // init =================================================================================
@@ -275,6 +280,31 @@ void SSD1315_DrawRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w
 	SSD1315_DrwLine_L(SSD1315_t *oled, rgt_x, bot_y, rgt_x, top_y);
 
 	return;
+}
+
+void SSD1315_DrawChar_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, const char c, SSD1315_font *font){ // x = 1, y = 1
+	
+	char ascii_conv = c - SSD1315_ASCII_BM_OFFSET;
+
+	uint8_t bot_y = top_y + font->h - 1; // 6
+	uint8_t top_p = SSD1315_FindPageY(top_y); // page 0
+	uint8_t bot_p = SSD1315_FindPageY(bot_y); // page 0
+	uint8_t top_p_idx = SSD1315_FindIndexY(top_y); // 1
+	uint8_t bot_p_idx = SSD1315_FindIndexY(bot_y); // 6
+	
+	if (top_p == bot_p) { // char stays on same page
+		uint8_t mask = (0xFF << top_p_idx) & (0xFF >> (7 - bot_p_idx)); // mask = 1111_1110 & 
+		uint16_t offset = (top_p * SSD1315_FB_PSIZE) + lft_x; // buffer byte offset
+
+		for (uint8_t x = 0; x < font->w; x++){
+			uint8_t text_mask = font->bitmap[x] | mask; // mask bitmap and mask
+			oled->fb[offset + x] |= mask;
+		}
+
+		return;
+	}
+
+	// char spans multiple pages
 }
 
 
