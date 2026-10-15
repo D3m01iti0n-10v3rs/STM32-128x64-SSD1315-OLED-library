@@ -60,6 +60,12 @@
 // misc
 #define SSD1315_ASCII_BM_OFFSET	((uint8_t)32)
 
+// enum
+typedef enum {
+	SSD1315_RENDER_OK = 0,
+	SSD1315_RENDER_ERR_OOB
+} SSD1315_Render_status;
+
 // struct
 typedef struct {
 	I2C_HandleTypeDef *hi2c;
@@ -89,6 +95,8 @@ void SSD1315_FillRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w
 
 void SSD1315_DrawRect_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h);
 void SSD1315_DrawRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h);
+
+SSD1315_Render_status SSD1315_DrawChar_NoOvrlp_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, const unsigned char c, SSD1315_font *font);
 
 void SSD1315_WriteFullFrame(SSD1315_t *oled);
 

@@ -237,7 +237,7 @@ void SSD1315_FillRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w
 
 	// fill on single page
 	if (top_p == bot_p) {
-		uint8_t mask = ~((0xFF << top_p_idx) & (0xFF >> (7 - bot_p_idx)));
+		uint8_t mask = ~(0xFF << top_p_idx) & ~(0xFF >> (7 - bot_p_idx));
 		uint16_t offset = (top_p * SSD1315_FB_PSIZE) + lft_x;
 
 		for (uint8_t x = 0; x < w; x++) oled->fb[offset + x] &= mask;
@@ -259,8 +259,8 @@ void SSD1315_FillRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w
 }
 
 void SSD1315_DrawRect_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h){
-	uint8_t rgt_x = lft_x + w - 1;
-	uint8_t bot_y = top_y + h - 1;
+	uint8_t rgt_x = lft_x + w;
+	uint8_t bot_y = top_y + h;
 
 	SSD1315_DrwLine_H(oled, lft_x, top_y, rgt_x, top_y);
 	SSD1315_DrwLine_H(oled, lft_x, top_y, lft_x, bot_y);
@@ -271,8 +271,8 @@ void SSD1315_DrawRect_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w
 }
 
 void SSD1315_DrawRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w, uint8_t h){
-	uint8_t rgt_x = lft_x + w - 1;
-	uint8_t bot_y = top_y + h - 1;
+	uint8_t rgt_x = lft_x + w;
+	uint8_t bot_y = top_y + h;
 
 	SSD1315_DrwLine_L(oled, lft_x, top_y, rgt_x, top_y);
 	SSD1315_DrwLine_L(oled, lft_x, top_y, lft_x, bot_y);
@@ -282,29 +282,32 @@ void SSD1315_DrawRect_L(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, uint8_t w
 	return;
 }
 
-void SSD1315_DrawChar_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, const char c, SSD1315_font *font){ // x = 1, y = 1
+SSD1315_Render_status SSD1315_DrawChar_NoOvrlp_H(SSD1315_t *oled, uint8_t lft_x, uint8_t top_y, const unsigned char c, SSD1315_font *font){ // x = 1, y = 1
 	
-	char ascii_conv = c - SSD1315_ASCII_BM_OFFSET;
+	if (lft_x + font->w > 128) return SSD1315_RENDER_ERR_OOB;
+	if (top_y + font->h > 64) return SSD1315_RENDER_ERR_OOB;
 
-	uint8_t bot_y = top_y + font->h - 1; // 6
+	uint8_t ascii_conv = (uint8_t)(c - font->ascii_offset);
+
+	uint8_t bot_y = top_y + font->h - 1; // 7
 	uint8_t top_p = SSD1315_FindPageY(top_y); // page 0
 	uint8_t bot_p = SSD1315_FindPageY(bot_y); // page 0
 	uint8_t top_p_idx = SSD1315_FindIndexY(top_y); // 1
-	uint8_t bot_p_idx = SSD1315_FindIndexY(bot_y); // 6
+	uint8_t bot_p_idx = SSD1315_FindIndexY(bot_y); // 7
 	
 	if (top_p == bot_p) { // char stays on same page
-		uint8_t mask = (0xFF << top_p_idx) & (0xFF >> (7 - bot_p_idx)); // mask = 1111_1110 & 
-		uint16_t offset = (top_p * SSD1315_FB_PSIZE) + lft_x; // buffer byte offset
+		uint16_t offset = (top_p * SSD1315_FB_PSIZE) + lft_x; // byte 1
 
 		for (uint8_t x = 0; x < font->w; x++){
-			uint8_t text_mask = font->bitmap[x] | mask; // mask bitmap and mask
-			oled->fb[offset + x] |= mask;
+			uint8_t text_mask = font->bitmap[(ascii_conv * font->w) + x] << top_p_idx; 
+			oled->fb[offset + x] |= text_mask;
 		}
 
-		return;
+		return SSD1315_RENDER_OK;
 	}
 
 	// char spans multiple pages
+	return SSD1315_RENDER_OK;
 }
 
 
